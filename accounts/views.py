@@ -5,11 +5,12 @@ from knox.views import LoginView as KnoxLoginView
 
 from rest_framework import generics, permissions
 from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from knox.models import AuthToken
 from .serializers import UserSerializer, RegisterSerializer, ChangePasswordSerializer, PatientSerializer, RobotSerializer
 from django.views.decorators.debug import sensitive_post_parameters
 
-from rest_framework.views import APIView
 
 
 from .models import Patient,Robot
@@ -51,22 +52,27 @@ from rest_framework import generics, permissions
 
 
 #Patient Api
-class PatientAPIView(APIView):
+class PatientAPI(APIView):
     permission_classes = [permissions.IsAuthenticated,]
+
     def get(self, request, *args, **kwargs):
-        patients = Patient.objects.all()
+        patients = Patient.objects.filter(user=request.user)
+        #patients = request.user.patients()
         serializer = PatientSerializer(patients, many=True)
         return Response(serializer.data)
-
+    
     def post(self, request, *args, **kwargs):
-        serializer = PatientSerializer(data=request.data)
+        data = request.data.copy()  # Copy the data to modify before serialization
+        data['user'] = request.user.id  # Set the user field to the current user's ID
+
+        serializer = PatientSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 #Robot Api
-class RobotAPIView(APIView):
+class RobotAPI(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
