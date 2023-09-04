@@ -171,6 +171,49 @@
 				"description": ""
 			},
 			"response": []
+		},
+		{
+			"name": "Patients",
+			"request": {
+				"url": "http://localhost:8000/api/patients/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token dcd76a7635d215607e8cf041092998f12b6d8baa61e4d86b67a985fd85507358",
+						"description": ""
+					}
+				],
+				"body": {
+					"first_name": "John3",
+					"last_name": "Doe3",
+					"gender": "M",
+					"date_of_birth": "1990-01-01",
+					"address": "123 Main St",
+					"email": "john3@example.com"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Add Medications",
+			"request": {
+				"url": "http://localhost:8000/medications/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token dcd76a7635d215607e8cf041092998f12b6d8baa61e4d86b67a985fd85507358",
+						"description": ""
+					}
+				],
+				"body": {
+					
+				},
+				"description": ""
+			},
+			"response": []
 		}
 	]
 }

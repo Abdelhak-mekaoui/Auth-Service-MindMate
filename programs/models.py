@@ -20,11 +20,12 @@ class Medication(models.Model):
 
 class MedicationReminder(models.Model):
     STATUS_CHOICES = (
-        (True, 'Completed'),
-        (False, 'Not Completed'),
+        (-1, 'Pending'),
+        (1, 'Completed'),
+        (0, 'Not Completed'),
     )
 
-    status = models.BooleanField(choices=STATUS_CHOICES)
+    status = models.IntegerField(choices=STATUS_CHOICES)
     description = models.TextField()
     date = models.DateTimeField()
     medication = models.ForeignKey(Medication, on_delete=models.CASCADE)
