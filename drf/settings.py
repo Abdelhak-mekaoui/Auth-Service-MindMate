@@ -87,6 +87,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+     'aws_rds': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DB_NAME'),        # Load DB_NAME from environment variable
+        'USER': os.environ.get('DB_USER'),        # Load DB_USER from environment variable
+        'PASSWORD': os.environ.get('DB_PASSWORD'),  # Load DB_PASSWORD from environment variable
+        'HOST': os.environ.get('DB_HOST'),        # Load DB_HOST from environment variable
+        'PORT': os.environ.get('DB_PORT', '5432'),  # Load DB_PORT from environment variable (default to 5432)
     }
 }
 
