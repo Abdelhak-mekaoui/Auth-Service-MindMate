@@ -3,10 +3,12 @@ pipeline {
 
     environment {
         AWS_DEFAULT_REGION = 'us-east-1'
-        AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
-        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
-        DOCKER_IMAGE_NAME = 'mindmate-main-app'
+        AWS_ACCOUNT_ID = '481063092768'
         ECR_REPOSITORY = 'mindmate-main-app'
+        IMAGE_TAG = 'latest'
+        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY}"
+        DOCKER_IMAGE_NAME = 'mindmate-main-app'
+        
     }
 
     stages {
@@ -32,15 +34,13 @@ pipeline {
         stage('Push to ECR') {
             steps {
                 script {
-                    // Authenticate Docker with AWS ECR
-                    withCredentials([
-                            [$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'your-aws-credentials-id']
-                        ]) {
-                        docker.withRegistry("https://${env.AWS_DEFAULT_REGION}.dkr.ecr.${env.AWS_DEFAULT_REGION}.amazonaws.com", 'ecr:us-east-1') {
-                            // Push the Docker image to ECR
-                            docker.image("${env.ECR_REPOSITORY}:latest").push()
-                        }
-                    }
+                    // Authenticate Docker with AWS ECR using the get-login-password command
+                    def ecrLoginCmd = "aws ecr get-login-password --region ${env.AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin 481063092768.dkr.ecr.us-east-1.amazonaws.com"
+                    sh ecrLoginCmd
+
+                    // Push the Docker image to ECR
+                    def dockerImage = docker.image("${env.ECR_REPOSITORY}:latest")
+                    dockerImage.push()
                 }
             }
         }
@@ -51,7 +51,7 @@ pipeline {
             echo 'Docker image successfully built and pushed to ECR!'
         }
         failure {
-            echo 'Docker image failed to bu built and pushed to ECR!'
+            echo 'Docker image failed to be built and pushed to ECR!'
         }
     }
 }
