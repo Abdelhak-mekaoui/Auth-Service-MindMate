@@ -53,7 +53,10 @@ class MedicationReminderAPI(APIView):
     def get(self, request, *args, **kwargs):
         data = dict(request.data)
         patient_id = data.pop('patient', None)
+        print(f"this is the patinet id from md rem : {patient_id}")
         patient = None
+        patient_id = request.query_params.get('patient', None)
+
         if patient_id:
             patient = Patient.objects.filter(id=patient_id).first()
 
@@ -93,7 +96,7 @@ class MedicationReminderAPI(APIView):
 
             # Publish the message to RabbitMQ
             try:
-                connection = pika.BlockingConnection(pika.ConnectionParameters('127.0.0.1'))  
+                connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))  
                 channel = connection.channel()
                 channel.queue_declare(queue='medication_reminder_queue')  
                 channel.basic_publish(exchange='', routing_key='medication_reminder_queue', body=json.dumps(message))

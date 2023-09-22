@@ -1,5 +1,8 @@
 # Use the official Python image as the base image
-FROM python:3.9
+# Use an official Python runtime as the base image with Python 3.10 or higher
+FROM python:3.10
+
+# Rest of your Dockerfile remains the same
 
 # Set environment variables for Django
 ENV PYTHONUNBUFFERED 1

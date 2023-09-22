@@ -5,7 +5,6 @@ pipeline {
         AWS_DEFAULT_REGION = 'us-east-1'
         AWS_ACCOUNT_ID = '481063092768'
         ECR_REPOSITORY = 'mindmate-main-app'
-        IMAGE_TAG = 'latest'
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY}"
         DOCKER_IMAGE_NAME = 'mindmate-main-app'
         
