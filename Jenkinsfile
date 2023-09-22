@@ -21,11 +21,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image of your Django app
-                    def dockerImage = docker.build(env.DOCKER_IMAGE_NAME)
-
-                    // Tag the Docker image for ECR repository
-                    dockerImage.tag("${env.ECR_REPOSITORY}:latest")
+                    docker.build("-t mindmate-main-app .", context: '.')
                 }
             }
         }
