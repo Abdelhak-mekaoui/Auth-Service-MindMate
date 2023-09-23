@@ -22,6 +22,11 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image of your Django app
+                    dir('/home/ubuntu/.jenkins/workspace/MindMatePipeline') {
+
+                        sh 'ls -la'  // Replace with your actual commands
+                        sh 'echo "This is the workspace directory."'
+                    }
                     def dockerImage = docker.build(env.DOCKER_IMAGE_NAME)
 
                     // Tag the Docker image for ECR repository
